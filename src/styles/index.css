@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter-tight';
+@import '@fontsource-variable/jetbrains-mono';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* Theme tokens. Change --accent to restyle the whole site. */
+:root,
+[data-theme='dark'] {
+  --bg: #0a0b0d;
+  --surface: #111317;
+  --surface-2: #181b20;
+  --border: #23272e;
+  --fg: #f2f1ed;
+  --muted: #9a9ea6;
+  /* --accent-custom is set at runtime from Settings > accent color. */
+  --accent: var(--accent-custom, #e9b44c);
+  --accent-fg: #14110a;
+  --danger: #f87171;
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --surface-2: #f1efe9;
+  --border: #e2dfd6;
+  --fg: #15171a;
+  --muted: #5b6068;
+  /* #9a6200: 5.1:1 with white text and 4.8:1 as text on --bg (WCAG AA). */
+  --accent: #9a6200;
+  --accent-fg: #ffffff;
+  --danger: #c81e1e;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger);
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-sans: 'Inter Tight Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+}
+
+/* In the base layer so Tailwind utilities (e.g. focus-visible:outline-none on inputs) win. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+/* Theme toggle: both icons render, CSS shows the one for the current theme. */
+[data-theme='light'] .theme-icon-dark,
+[data-theme='dark'] .theme-icon-light {
+  display: none;
+}
+
+/* Hero entrance. Pure CSS so it plays on pre-rendered HTML before JavaScript loads. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll reveal (components/ui/Reveal.jsx). Only hidden when JS is running (html.js is set
+   by the inline script in index.html) and motion is allowed, so content is never lost. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .reveal {
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

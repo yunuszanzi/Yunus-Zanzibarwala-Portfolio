@@ -69,7 +69,7 @@ The site is a React app, but search engines and link previews get real HTML:
 1. `npm run build` builds the app, then builds `src/entry-server.jsx` for Node.
 2. `scripts/prerender.mjs` fetches the published content from Supabase, renders the home page to HTML, and writes it into `dist/index.html` with the page title, meta description, canonical URL, Open Graph/Twitter tags and JSON-LD (`Person` + one `CreativeWork` per project).
 3. It also writes `dist/sitemap.xml` and `dist/robots.txt`, and saves the plain app shell as `dist/app.html`, which `vercel.json` serves for every other route (`/admin`, 404s).
-4. In the browser, React takes over the pre-rendered HTML and immediately refetches live data, so visitors always see the latest content.
+4. In the browser, React takes over the pre-rendered HTML and refreshes it with live data on the visitor's first scroll, tap or mouse move (or after 6 idle seconds), so visitors see the latest content without the database client slowing down the first load.
 
 The HTML snapshot is from the last build. Edits in the admin show up for visitors straight away, but crawlers see them after the next deploy. To refresh it automatically, add a Vercel Deploy Hook and call it after big edits (or on a daily schedule).
 
@@ -113,6 +113,14 @@ The tests run against the real production build and your **live** Supabase proje
 | Earlier phases (found with the same harness): idle-loading the contact form hurt mobile Lighthouse, `/#contact` links landed short, low-contrast red and badge text in the light theme, double focus ring on inputs | All fixed in Phase 9                                                                                |
 
 Everything else that failed during the test phase was a mistake in the tests themselves (selectors, timing), not the app. Nothing known remains open.
+
+## Live background
+
+The public site has an interactive "constellation" background (`src/components/layout/ConstellationBackground.jsx`): drifting particles linked by lines that connect to and ease away from the cursor, with the field and the hero glow shifting slightly as the mouse moves.
+
+- It sets itself up on the visitor's first mouse move, scroll, tap or key press, so it costs nothing while the page loads.
+- It uses fewer particles on phones, pauses in background tabs, and shows a still frame for people who prefer reduced motion.
+- To turn it off, set `BACKGROUND_EFFECT = 'none'` in `src/lib/effectsConfig.js`. To tune it (link distance, cursor radius, parallax), edit `src/lib/constellation.js`.
 
 ## Notes on packages
 

@@ -92,7 +92,10 @@ test.describe('project showcase', () => {
     await page.setViewportSize({ width: 360, height: 780 })
     await page.goto('/')
     await expect(page.getByTestId('scroll-gallery')).toHaveCount(0)
-    const region = page.getByRole('region', { name: /screenshots$/ }).first()
+    // Live data (with the mocked screenshots on the first project) loads on first scroll.
+    const firstProject = page.locator('#work article').first()
+    await firstProject.scrollIntoViewIfNeeded()
+    const region = firstProject.getByRole('region', { name: /screenshots$/ })
     await region.scrollIntoViewIfNeeded()
     await expect(region.locator('img')).toHaveCount(3)
   })

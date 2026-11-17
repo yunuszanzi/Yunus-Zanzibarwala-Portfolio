@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import Seo from '../components/layout/Seo'
+import ConstellationBackground from '../components/layout/ConstellationBackground'
+import { BACKGROUND_EFFECT } from '../lib/effectsConfig'
 import Hero from '../components/sections/Hero'
 import Work from '../components/sections/Work'
 import About from '../components/sections/About'
@@ -65,6 +67,7 @@ export default function Home() {
   return (
     <>
       <Seo settings={settings} projects={published} />
+      {BACKGROUND_EFFECT === 'constellation' && <ConstellationBackground />}
       <Navbar
         shortName={shortName(name).split(' ')[0]}
         email={settings?.email}

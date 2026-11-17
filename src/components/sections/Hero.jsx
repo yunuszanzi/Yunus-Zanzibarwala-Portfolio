@@ -25,10 +25,14 @@ export default function Hero({ settings, loading }) {
       aria-labelledby="hero-title"
       className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-5 pt-28 pb-12 md:px-8 md:pb-16"
     >
+      {/* Glow drifts toward the cursor (--mx/--my are set by ConstellationBackground). */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 right-[-10%] size-[42rem] rounded-full opacity-[0.12] blur-3xl"
-        style={{ background: 'radial-gradient(circle, var(--accent), transparent 65%)' }}
+        className="pointer-events-none absolute -top-40 right-[-10%] size-[42rem] rounded-full opacity-[0.12] blur-3xl transition-transform duration-700 ease-out"
+        style={{
+          background: 'radial-gradient(circle, var(--accent), transparent 65%)',
+          transform: 'translate3d(calc(var(--mx, 0) * 60px), calc(var(--my, 0) * 60px), 0)',
+        }}
       />
       <div className="relative mx-auto w-full max-w-7xl">
         {loading || !settings ? (

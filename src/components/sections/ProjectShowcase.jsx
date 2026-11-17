@@ -1,5 +1,5 @@
 import { ArrowUpRight, Lock } from 'lucide-react'
-import Chip from '../ui/Chip'
+import ChipList from '../ui/ChipList'
 import Reveal from '../ui/Reveal'
 import ProjectMedia from './ProjectMedia'
 
@@ -69,52 +69,51 @@ export default function ProjectShowcase({ project, index, gallery }) {
 
       {gallery ?? <ProjectMedia images={images} title={project.title} />}
 
-      <div className="mt-12 grid gap-10 md:grid-cols-12">
-        <Reveal className="space-y-6 md:col-span-4">
+      {(project.role || project.tech?.length > 0) && (
+        <Reveal className="border-line mt-12 grid gap-6 border-t pt-8 md:grid-cols-12 md:gap-10">
           {project.role && (
-            <div>
+            <div className="md:col-span-3">
               <h5 className="text-muted mb-2 font-mono text-[11px] tracking-[0.2em] uppercase">
                 Role
               </h5>
-              <p>{project.role}</p>
+              <p className="leading-relaxed">{project.role}</p>
             </div>
           )}
           {project.tech?.length > 0 && (
-            <div>
+            <div className={project.role ? 'md:col-span-9' : 'md:col-span-12'}>
               <h5 className="text-muted mb-3 font-mono text-[11px] tracking-[0.2em] uppercase">
-                Stack
+                Stack <span className="text-muted">· {project.tech.length}</span>
               </h5>
-              <ul className="flex flex-wrap gap-2">
-                {project.tech.map((t) => (
-                  <li key={t}>
-                    <Chip>{t}</Chip>
-                  </li>
-                ))}
-              </ul>
+              <ChipList items={project.tech} label={`${project.title} tech stack`} />
             </div>
           )}
         </Reveal>
-        {project.feature_groups?.length > 0 && (
-          <div className="grid gap-8 sm:grid-cols-2 md:col-span-8">
-            {project.feature_groups.map((g, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <h5 className="mb-3 font-medium">{g.heading}</h5>
-                <ul className="text-muted space-y-2 text-sm leading-relaxed">
-                  {g.bullets?.map((b, j) => (
-                    <li key={j} className="flex gap-3">
-                      <span
-                        className="bg-accent mt-2 size-1 shrink-0 rounded-full"
-                        aria-hidden="true"
-                      />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
+
+      {project.feature_groups?.length > 0 && (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {project.feature_groups.map((g, i) => (
+            <Reveal
+              key={i}
+              delay={i * 0.05}
+              className="border-line bg-surface/60 rounded-2xl border p-5 md:p-6"
+            >
+              <h5 className="mb-3 font-medium">{g.heading}</h5>
+              <ul className="text-muted space-y-2 text-sm leading-relaxed">
+                {g.bullets?.map((b, j) => (
+                  <li key={j} className="flex gap-3">
+                    <span
+                      className="bg-accent mt-2 size-1 shrink-0 rounded-full"
+                      aria-hidden="true"
+                    />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
+        </div>
+      )}
     </article>
   )
 }

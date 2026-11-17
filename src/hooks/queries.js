@@ -10,6 +10,22 @@ export const experiences = createTableHooks('experiences')
 export const education = createTableHooks('education')
 export const alsoShipped = createTableHooks('also_shipped')
 export const messages = createTableHooks('messages', { order: 'created_at', ascending: false })
+export const chatReplies = createTableHooks('chat_replies')
+export const chats = createTableHooks('chats', { order: 'updated_at', ascending: false })
+
+/**
+ * Save (create or extend) the visitor's own conversation through the save_chat() database
+ * function. The random token proves it's the same browser; visitors can't read chats.
+ */
+export async function saveChat({ id, token, transcript }) {
+  const supabase = await db()
+  const { error } = await supabase.rpc('save_chat', {
+    p_id: id,
+    p_token: token,
+    p_transcript: transcript,
+  })
+  if (error) throw error
+}
 
 // ---------------------------------------------------------------- site settings (single row)
 const settingsQuery = {

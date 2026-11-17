@@ -39,8 +39,12 @@ export default function Contact({ settings, loading, children }) {
   const socials = settings?.social_links ?? []
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="px-5 py-24 md:px-8 md:py-32">
-      <div className="mx-auto max-w-7xl">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="px-3 py-6 sm:px-5 md:px-8 md:py-10"
+    >
+      <div className="glass mx-auto max-w-7xl px-5 py-14 sm:px-8 md:px-12 md:py-20">
         <SectionHeading
           index="05"
           label="Contact"
@@ -50,8 +54,8 @@ export default function Contact({ settings, loading, children }) {
         {loading || !settings ? (
           <SkeletonText lines={4} className="max-w-xl" />
         ) : (
-          <div className="grid gap-16 md:grid-cols-12 [&>*]:min-w-0">
-            <Reveal className="md:col-span-6">
+          <div className="grid gap-12 md:grid-cols-2 lg:gap-16 [&>*]:min-w-0">
+            <Reveal>
               <p className="text-muted max-w-lg text-lg leading-relaxed">
                 {settings.contact_pitch}
               </p>
@@ -73,7 +77,7 @@ export default function Contact({ settings, loading, children }) {
               </div>
               {children}
             </Reveal>
-            <Reveal className="md:col-span-6" delay={0.08}>
+            <Reveal delay={0.08}>
               <ul className="border-line border-b">
                 <Method
                   icon={Mail}

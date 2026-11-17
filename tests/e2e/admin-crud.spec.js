@@ -86,6 +86,18 @@ const MODULES = [
     },
     expect: { title: 'CLI tool', url: 'https://example.com' },
   },
+  {
+    path: 'chat-replies',
+    table: 'chat_replies',
+    noun: 'reply',
+    fill: {
+      'Suggested question (optional)': 'Do you work weekends?',
+      Answer: 'Sometimes, for urgent fixes.',
+    },
+    chips: ['weekend', 'saturday'],
+    chipLabel: 'Keywords',
+    expect: { label: 'Do you work weekends?', keywords: ['weekend', 'saturday'] },
+  },
 ]
 
 for (const mod of MODULES) {
@@ -95,7 +107,8 @@ for (const mod of MODULES) {
     const rows = page
       .locator('ul > li')
       .filter({ has: page.getByRole('button', { name: /^Reorder/ }) })
-    await expect(rows.first()).toBeVisible()
+    // Live read from Supabase: allow for a slow network.
+    await expect(rows.first()).toBeVisible({ timeout: 20_000 })
     const count = await rows.count()
 
     // Create: empty submit is blocked, then a valid one is saved at the end of the list.
@@ -109,7 +122,7 @@ for (const mod of MODULES) {
       await dialog.getByLabel(label, { exact: true }).fill(value)
     }
     for (const chip of mod.chips ?? []) {
-      await dialog.getByLabel('Skills').fill(chip)
+      await dialog.getByLabel(mod.chipLabel ?? 'Skills').fill(chip)
       await page.keyboard.press('Enter')
     }
     await dialog.getByRole('button', { name: `Add ${mod.noun}` }).click()
@@ -218,4 +231,33 @@ test('messages: opening marks read, delete asks first', async ({ page, supa }) =
   await page.getByRole('button', { name: 'Delete' }).first().click()
   await page.locator('dialog[open]').getByRole('button', { name: 'Delete' }).click()
   await expect.poll(() => supa.rest('messages', 'DELETE').length).toBe(1)
+})
+
+test('chats inbox: shows the transcript, flags unanswered questions, marks read', async ({
+  page,
+  supa,
+}) => {
+  supa.override(
+    (req) => req.method() === 'GET' && req.url().includes('/rest/v1/chats'),
+    (route) =>
+      route.fulfill({
+        headers: { 'access-control-allow-origin': '*' },
+        json: [
+          {
+            id: 'c1',
+            is_read: false,
+            updated_at: '2026-11-17T10:00:00Z',
+            transcript: [
+              { from: 'user', text: 'Do you do blockchain audits?' },
+              { from: 'bot', text: 'Yunus will reply.', fallback: true },
+            ],
+          },
+        ],
+      }),
+  )
+  await page.goto('/admin/chats')
+  await page.getByRole('button', { name: /Do you do blockchain audits\?/ }).click()
+  await expect(page.getByText('Some questions had no matching answer')).toBeVisible()
+  await expect(page.getByText('Yunus will reply.')).toBeVisible()
+  await expect.poll(() => supa.rest('chats', 'PATCH')[0]?.body).toEqual({ is_read: true })
 })

@@ -42,6 +42,17 @@ export const settingsSchema = z.object({
   seo_title: optText(70),
   seo_description: optText(200),
   accent_color: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex color like #e9b44c'),
+  chat_enabled: z.boolean().default(true),
+  chat_greeting: text('Greeting', 500),
+  chat_fallback: text('Fallback message', 500),
+})
+
+/** Predefined chat answer. Keywords are words or short phrases that trigger it. */
+export const chatReplySchema = z.object({
+  label: optText(80),
+  keywords: z.array(z.string().trim().min(1)).min(1, 'Add at least one keyword'),
+  answer: text('Answer', 1500),
+  sort_order: sortOrder,
 })
 
 export const statSchema = z.object({

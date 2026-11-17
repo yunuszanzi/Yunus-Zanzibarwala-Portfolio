@@ -23,7 +23,7 @@ export default function Hero({ settings, loading }) {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-5 pt-28 pb-12 md:px-8 md:pb-16"
+      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-3 pt-24 pb-6 sm:px-5 md:px-8 md:pb-10"
     >
       {/* Glow drifts toward the cursor (--mx/--my are set by ConstellationBackground). */}
       <div
@@ -34,7 +34,7 @@ export default function Hero({ settings, loading }) {
           transform: 'translate3d(calc(var(--mx, 0) * 60px), calc(var(--my, 0) * 60px), 0)',
         }}
       />
-      <div className="relative mx-auto w-full max-w-7xl">
+      <div className="glass relative mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 md:px-12 md:py-14">
         {loading || !settings ? (
           <div className="space-y-6">
             <Skeleton className="h-4 w-64" />

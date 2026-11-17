@@ -5,14 +5,14 @@ import { SwitchField, TextField } from '../FormFields'
 import ChipInput from '../ChipInput'
 import Button from '../../ui/Button'
 import { Field } from '../../ui/Field'
-import { cn } from '../../../lib/utils'
+import { cn, getError } from '../../../lib/utils'
 
 function FieldControl({ form, field }) {
   const { name, label, type, hint, rows, placeholder } = field
   if (type === 'switch') return <SwitchField form={form} name={name} label={label} />
   if (type === 'chips') {
     return (
-      <Field label={label} hint={hint}>
+      <Field label={label} hint={hint} error={getError(form.formState.errors, name)}>
         {(p) => (
           <Controller
             control={form.control}

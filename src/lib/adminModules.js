@@ -1,6 +1,7 @@
 import {
   alsoShippedSchema,
   categorySchema,
+  chatReplySchema,
   educationSchema,
   experienceSchema,
   linesToArray,
@@ -11,6 +12,7 @@ import {
 import {
   alsoShipped,
   categories,
+  chatReplies,
   education,
   experiences,
   services,
@@ -146,5 +148,31 @@ export const MODULES = {
     ],
     summary: (r) => [r.title, r.description],
     toRow: (v) => ({ ...v, url: v.url || null }),
+  },
+  'chat-replies': {
+    title: 'Chat replies',
+    description:
+      'Answers the site chat gives. When a visitor’s message contains a keyword, they get that answer; longer phrases win over single words. Order breaks ties.',
+    noun: 'reply',
+    hooks: chatReplies,
+    schema: chatReplySchema,
+    fields: [
+      {
+        name: 'label',
+        label: 'Suggested question (optional)',
+        type: 'text',
+        placeholder: 'How much does a project cost?',
+        hint: 'Shown as a button visitors can tap.',
+      },
+      {
+        name: 'keywords',
+        label: 'Keywords',
+        type: 'chips',
+        hint: 'Words or short phrases, e.g. price, cost, how much. Press Enter after each.',
+      },
+      { name: 'answer', label: 'Answer', type: 'textarea', rows: 4 },
+    ],
+    summary: (r) => [r.label || r.keywords.slice(0, 4).join(', '), r.answer],
+    getLabel: (r) => r.label || r.keywords[0] || 'reply',
   },
 }

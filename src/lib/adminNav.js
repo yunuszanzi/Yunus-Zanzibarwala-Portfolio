@@ -1,11 +1,13 @@
 import {
   BarChart3,
+  Bot,
   Briefcase,
   FolderKanban,
   GraduationCap,
   Inbox,
   LayoutDashboard,
   Layers,
+  MessagesSquare,
   Rocket,
   Settings,
   Sparkles,
@@ -24,5 +26,7 @@ export const ADMIN_NAV = [
   { path: 'experience', label: 'Experience', icon: Briefcase },
   { path: 'education', label: 'Education', icon: GraduationCap },
   { path: 'also-shipped', label: 'Also shipped', icon: Rocket },
+  { path: 'chat-replies', label: 'Chat replies', icon: Bot },
+  { path: 'chats', label: 'Chats', icon: MessagesSquare },
   { path: 'messages', label: 'Messages', icon: Inbox },
 ]

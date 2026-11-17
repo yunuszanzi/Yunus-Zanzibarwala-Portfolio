@@ -9,6 +9,8 @@ import {
   education,
   experiences,
   messages,
+  chatReplies,
+  chats,
   services,
   skillGroups,
   stats,
@@ -26,6 +28,8 @@ function useCounts() {
     education: education.useList(),
     'also-shipped': alsoShipped.useList(),
     messages: messages.useList(),
+    'chat-replies': chatReplies.useList(),
+    chats: chats.useList(),
   }
   const loading = Object.values(q).some((x) => x.isLoading)
   const counts = Object.fromEntries(Object.entries(q).map(([k, v]) => [k, v.data?.length ?? 0]))

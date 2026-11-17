@@ -10,6 +10,7 @@ import Settings from './Settings'
 import ProjectsList from './ProjectsList'
 import ProjectEdit from './ProjectEdit'
 import Messages from './Messages'
+import Chats from './Chats'
 import ComingSoon from './ComingSoon'
 import NotFound from '../NotFound'
 import CrudPage from '../../components/admin/crud/CrudPage'
@@ -20,6 +21,7 @@ const PAGES = {
   settings: <Settings />,
   projects: <ProjectsList />,
   messages: <Messages />,
+  chats: <Chats />,
   ...Object.fromEntries(
     Object.entries(MODULES).map(([path, config]) => [
       path,

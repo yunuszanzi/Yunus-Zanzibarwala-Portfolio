@@ -5,3 +5,4 @@
  * Change this one value to switch it off.
  */
 export const BACKGROUND_EFFECT = 'constellation'
+// export const BACKGROUND_EFFECT = 'none'

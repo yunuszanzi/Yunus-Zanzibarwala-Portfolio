@@ -110,21 +110,21 @@ export default function Path() {
     <section
       id="experience"
       aria-labelledby="path-title"
-      className="bg-surface/40 px-5 py-24 md:px-8 md:py-32"
+      className="px-3 py-6 sm:px-5 md:px-8 md:py-10"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="glass mx-auto max-w-7xl px-5 py-14 sm:px-8 md:px-12 md:py-20">
         <SectionHeading
           index="04"
           label="Path"
           title="Where I've worked and studied"
           id="path-title"
         />
-        <div className="grid gap-16 md:grid-cols-12">
-          <div className="md:col-span-7">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-16 [&>*]:min-w-0">
+          <div className="lg:col-span-7">
             <SubHeading>Experience</SubHeading>
             <Experience />
           </div>
-          <div className="space-y-14 md:col-span-5">
+          <div className="space-y-14 lg:col-span-5">
             <div>
               <SubHeading>Education</SubHeading>
               <Education />

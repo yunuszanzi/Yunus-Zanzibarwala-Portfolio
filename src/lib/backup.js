@@ -13,6 +13,7 @@ const TABLES = [
   'experiences',
   'education',
   'also_shipped',
+  'chat_replies',
 ]
 
 /** Fetch every content table into one JSON-able object. */

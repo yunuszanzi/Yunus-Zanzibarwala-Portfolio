@@ -68,8 +68,8 @@ export default function Work() {
 
   let index = -1
   return (
-    <section id="work" aria-labelledby="work-title" className="px-5 py-24 md:px-8 md:py-32">
-      <div className="mx-auto max-w-7xl">
+    <section id="work" aria-labelledby="work-title" className="px-3 py-6 sm:px-5 md:px-8 md:py-10">
+      <div className="glass mx-auto max-w-7xl px-5 py-14 sm:px-8 md:px-12 md:py-20">
         <SectionHeading
           index="01"
           label="Selected work"

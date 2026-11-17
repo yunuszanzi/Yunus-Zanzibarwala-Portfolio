@@ -24,6 +24,7 @@ const CONTENT = {
   experiences: { role: 'x', company: 'x' },
   education: { degree: 'x', institution: 'x' },
   also_shipped: { title: 'x' },
+  chat_replies: { keywords: ['x'], answer: 'x' },
 }
 
 for (const [table, row] of Object.entries(CONTENT)) {
@@ -80,6 +81,31 @@ test('invalid contact messages are refused by the database', async () => {
   for (const row of bad) {
     const { error } = await anon.from('messages').insert(row)
     expect(error, JSON.stringify(row)).not.toBeNull()
+  }
+})
+
+test('chats: visitors cannot read or write them directly', async () => {
+  const { data } = await anon.from('chats').select('*')
+  expect(data ?? []).toHaveLength(0)
+  const { error } = await anon
+    .from('chats')
+    .insert({ id: crypto.randomUUID(), client_token: 'x'.repeat(30), transcript: [] })
+  expect(error, 'direct insert should be refused').not.toBeNull()
+})
+
+test('save_chat rejects malformed conversations', async () => {
+  const id = crypto.randomUUID()
+  const good = [{ from: 'user', text: 'hello' }]
+  const bad = [
+    { p_id: id, p_token: 'short', p_transcript: good }, // token too short
+    { p_id: id, p_token: 't'.repeat(40), p_transcript: [] }, // empty
+    { p_id: id, p_token: 't'.repeat(40), p_transcript: [{ from: 'admin', text: 'hi' }] }, // bad sender
+    { p_id: id, p_token: 't'.repeat(40), p_transcript: [{ from: 'user', text: 'x'.repeat(2001) }] }, // too long
+    { p_id: id, p_token: 't'.repeat(40), p_transcript: { from: 'user', text: 'hi' } }, // not an array
+  ]
+  for (const args of bad) {
+    const { error } = await anon.rpc('save_chat', args)
+    expect(error, JSON.stringify(args).slice(0, 80)).not.toBeNull()
   }
 })
 

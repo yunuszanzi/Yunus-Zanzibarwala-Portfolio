@@ -6,7 +6,7 @@ import ThemeToggle from '../layout/ThemeToggle'
 import { ADMIN_NAV } from '../../lib/adminNav'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
-import { messages } from '../../hooks/queries'
+import { chats, messages } from '../../hooks/queries'
 import { cn } from '../../lib/utils'
 
 function SidebarNav({ unread, onNavigate }) {
@@ -29,9 +29,9 @@ function SidebarNav({ unread, onNavigate }) {
         >
           <Icon size={17} aria-hidden="true" />
           {label}
-          {path === 'messages' && unread > 0 && (
+          {unread[path] > 0 && (
             <span className="bg-accent text-accent-fg ml-auto rounded-full px-2 py-0.5 font-mono text-[11px]">
-              {unread}
+              {unread[path]}
               <span className="sr-only"> unread</span>
             </span>
           )}
@@ -48,7 +48,9 @@ export default function AdminLayout() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const { data: inbox } = messages.useList()
-  const unread = inbox?.filter((m) => !m.is_read).length ?? 0
+  const { data: chatList } = chats.useList()
+  const countUnread = (rows) => rows?.filter((r) => !r.is_read).length ?? 0
+  const unread = { messages: countUnread(inbox), chats: countUnread(chatList) }
 
   useEffect(() => setOpen(false), [location.pathname])
 

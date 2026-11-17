@@ -14,9 +14,9 @@ export default function About({ settings, loading }) {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="bg-surface/40 px-5 py-24 md:px-8 md:py-32"
+      className="px-3 py-6 sm:px-5 md:px-8 md:py-10"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="glass mx-auto max-w-7xl px-5 py-14 sm:px-8 md:px-12 md:py-20">
         <SectionHeading
           index="02"
           label="About"
@@ -24,7 +24,7 @@ export default function About({ settings, loading }) {
           id="about-title"
         />
 
-        <div className="grid gap-12 md:grid-cols-12">
+        <div className="grid gap-x-6 gap-y-12 md:grid-cols-12 lg:gap-x-12 [&>*]:min-w-0">
           <Reveal className="text-muted [&_a]:text-fg [&_strong]:text-fg space-y-5 text-lg leading-relaxed md:col-span-7 [&_a]:underline">
             {loading ? (
               <SkeletonText lines={6} />

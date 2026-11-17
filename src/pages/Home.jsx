@@ -3,6 +3,7 @@ import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import Seo from '../components/layout/Seo'
 import ConstellationBackground from '../components/layout/ConstellationBackground'
+import ChatLauncher from '../components/chat/ChatLauncher'
 import { BACKGROUND_EFFECT } from '../lib/effectsConfig'
 import Hero from '../components/sections/Hero'
 import Work from '../components/sections/Work'
@@ -105,6 +106,7 @@ export default function Home() {
         </Contact>
       </main>
       <Footer name={shortName(name)} socials={socials} />
+      <ChatLauncher settings={settings} />
     </>
   )
 }

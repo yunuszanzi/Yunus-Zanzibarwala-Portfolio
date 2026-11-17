@@ -2,7 +2,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Plus, Trash2 } from 'lucide-react'
 import PageHeader from '../../components/admin/PageHeader'
-import { FormSection, TextField } from '../../components/admin/FormFields'
+import { FormSection, SwitchField, TextField } from '../../components/admin/FormFields'
 import SettingsFiles from '../../components/admin/settings/SettingsFiles'
 import BackupCard from '../../components/admin/settings/BackupCard'
 import Button from '../../components/ui/Button'
@@ -14,8 +14,8 @@ import { useToast } from '../../hooks/useToast'
 import { errorMessage } from '../../lib/utils'
 
 const FIELDS = Object.keys(settingsSchema.shape)
-const pick = (obj) =>
-  Object.fromEntries(FIELDS.map((k) => [k, obj?.[k] ?? (k === 'social_links' ? [] : '')]))
+const DEFAULTS = { social_links: [], chat_enabled: true }
+const pick = (obj) => Object.fromEntries(FIELDS.map((k) => [k, obj?.[k] ?? DEFAULTS[k] ?? '']))
 
 function SettingsForm({ settings }) {
   const save = useSaveSettings()
@@ -131,6 +131,27 @@ function SettingsForm({ settings }) {
           textarea
           rows={2}
           hint="Around 150 characters."
+        />
+      </FormSection>
+
+      <FormSection
+        title="Chat"
+        description="The assistant in the bottom-right corner of the site. Answers live in Chat replies."
+      >
+        <SwitchField
+          form={form}
+          name="chat_enabled"
+          label="Show the chat on the site"
+          description="Turn off to hide the chat button."
+        />
+        <TextField form={form} name="chat_greeting" label="Greeting" textarea rows={2} />
+        <TextField
+          form={form}
+          name="chat_fallback"
+          label="When there's no matching answer"
+          textarea
+          rows={2}
+          hint="Shown with a “Send this chat on WhatsApp” button."
         />
       </FormSection>
 
